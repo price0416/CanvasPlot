@@ -1,0 +1,370 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Canvas Vizualization</title>
+        <link href="http://localhost:9876/loadCSS.css" rel="stylesheet" type="text/css">
+        <script src="http://code.jquery.com/jquery-latest.js">
+        </script>
+        <script src="http://localhost:9876/flot?include=jquery.flot.js">
+        </script>
+        <script src="http://localhost:9876/flot?jquery.flot.navigate.js">
+        </script>
+        <script src="http://localhost:9876/flot?include=jquery.megaselectlist.js">
+        </script>
+        <script src="http://localhost:9876/flot?include=multiselect.js">
+        </script>
+        <script src="http://localhost:9876/flot?include=jquery.flot.resize.js">
+        </script>
+        <script src="http://localhost:9876/flot?include=jquery.flot.navigate.js">
+        </script>
+    </head>
+    <body>
+        <h1>Canvas Dotplot</h1>
+        <div id="placeholder" style="width:700px;height:750px;">
+        </div>
+        <br/>
+        <br/>
+        <div class="borderedText" id="hoverdata">
+            <!-- Mouse hovers at
+            (<span id="x">0</span>, <span id="y">0</span>). <span id="clickdata"></span>
+            -->
+            <div class="message">
+            </div>
+            <br/>
+            <div id="flag">
+            </div>
+        </div>
+        <script>
+            /* $(document).ready(function(){
+             $("select").custSelectBox({
+             selectwidth: "auto"
+             
+             });
+             
+             });*/
+        </script>
+        <div class="select_wrap" class="select_field">
+            <select name="referenceSelect" id="referenceSelect" style="width:1000px;">
+                <option value='-1'>Reference Organism</option>
+            </select>
+        </div>
+        
+        <div class="select_wrap">
+        <select name="querySelect" class="select_field" multiple="multiple" id="querySelect" style="width:1000px;">
+        <option value='-1'>Query Organisms</option>
+        </select>
+        </div>
+        <!--
+        <form action="#" method="get" name="form" id="form">
+            <div class="examples">
+                <label class="examples">
+                    First example of MultiSelect
+                </label>
+                <select name="querySelect" multiple="multiple" id="querySelect" style="width:1000px;" class="arc90_multiselect">
+                    <option value='-1'>Query Organisms</option>
+                </select>
+            </div>
+        </form>
+		-->
+        <br clear="all" />
+        <br/>
+        <script type="text/javascript">
+            $(function(){
+                var refVal = -1;
+                var queryVals = [];
+                var queryString = "";
+                var resultFiles = [];
+                var data = [];
+                var alreadyFetched = {};
+                var placeholder = $("#placeholder");
+                var options = {
+                    series: {
+                        lines: {
+                            show: false
+                        },
+                        points: {
+                            show: true
+                        },
+                        shadowSize: 0
+                    },
+                    grid: {
+                        hoverable: true,
+                        clickable: true
+                    },
+                    xaxis: {
+                        zoomRange: [0.1, 3000000],
+                        panRange: [0, 3000000]
+                    },
+                    yaxis: {
+                        zoomRange: [0.1, 3000000],
+                        panRange: [-200000, 3000000]
+                    },
+                    zoom: {
+                        interactive: true
+                    },
+                    pan: {
+                        interactive: true
+                    }
+                };
+                
+                var plot = $.plot(placeholder, data, options);
+                
+                $(document).ready(function(){
+                    $.ajax({
+                        url: 'http://localhost:9876/getOrg',
+                        dataType: "html",
+                        jsonpCallback: "_callback",
+                        cache: false,
+                        timeout: 5000,
+                        success: function(data){
+                            $('select').append(data);
+                            /*$("select").custSelectBox({
+                             selectwidth: "auto"
+                             });*/
+                            $("#referenceSelect").change(onReferenceChange);
+                            $("#querySelect").change(onQueryChange);
+                            /*
+                            a$.NO_SELECTION = 'No selection'; // TEXT for 'No selection' when nothing selected
+                            a$.SELECTED = 'Options selected'; // TEXT for 'XX Options selected' when over 1 selected
+                            a$.SELECT_ALL = 'Select All'; // TEXT for 'Select All' for checkboxes
+                            a$.SelectAllMin = 6; // minimum number of options needed to show 'Select All'
+                            a$.WhenToUse = 'class'; // class | multiple | all : for how to make selects become multiselects
+                            a$.msSeparator = '|'; // separator for values (can be multiple characters)
+                            */
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            alert('error ' + textStatus + " " + errorThrown);
+                        }
+                    });
+                });
+                
+                function onReferenceChange(){
+                    var selected = $("#referenceSelect option:selected");
+                    var output = "";
+                    
+                    if (selected.val() != -1) {
+                        output = "You selected " + selected.val();
+                        refVal = selected.val();
+                        if (queryVals.length >= 1) //If there are query values selected already...
+                        {
+                            //Don't allow users to select the same values for reference/query.
+                            for (var i in queryVals) {
+                                //$("#flag").text("Queryval: " + queryVals[i] + "::: Ref:" + refVal + '\n');                                
+                                if (refVal == queryVals[i]) {
+                                    $('#querySelect :selected').each(function(i, selected){
+                                        var selectedVal = $(selected).val();
+                                        if (selectedVal == refVal) {
+                                            var selectedText = $(selected).text();
+                                            alert(selectedText + " selected as reference.  Removed from query set.");
+                                            $(selected).removeAttr("selected");
+                                            queryVals.splice(i, 1)
+                                        }
+                                    });
+                                }
+                            }
+                            //In case the last query element is removed by the above code.
+                            if (queryVals.length >= 1) {
+                                fetchData();
+                            }
+                        }
+                    }
+                }
+                
+                function onQueryChange(){
+                    queryVals = [];
+                    $('#querySelect :selected').each(function(i, selected){
+                        var selectedVal = $(selected).val();
+                        if (selectedVal >= 1) //Only accept valid values.
+                        {
+                            if (selectedVal == refVal) {
+                                var selectedText = $(selected).text();
+                                alert(selectedText + " cannot be selected as both reference and query.");
+                                $(selected).removeAttr("selected");
+                            }
+                            else {
+                                queryVals[i] = selectedVal;
+                                var val = queryVals[i];
+                            }
+                        }
+                        
+                    });
+                    if (refVal != -1 && queryVals.length >= 1) //If there is a valid reference selected already...
+                    {
+                        fetchData();
+                    }
+                }
+                
+                function buildQueryString(){
+                    //$("#flag").text("Running buildQueryString: ");
+                    //$("#flag").append('<br />');
+                    queryString = "?reference=" + refVal;
+                    
+                    for (var i in queryVals) {
+                        //$("#flag").append("loop " + i + "val: " + queryVals[i]);
+                        queryString = queryString + "&qry=" + queryVals[i];
+                    }
+                    //$("#flag").append(queryString);
+                }
+                
+                function fetchData(){
+                    buildQueryString();
+                    $.ajax({
+                        url: 'http://localhost:9876/fetchData' + queryString,
+                        dataType: "html",
+                        jsonpCallback: "_callback",
+                        cache: false,
+                        timeout: 5000,
+                        success: function(data){
+                            var substring = data.substring(data.indexOf("'") + 1, data.lastIndexOf("'"));
+                            resultFiles = substring.split(",");
+                            clearPlot();
+                            for (var i in resultFiles) {
+                                $.ajax({
+                                    url: "http://localhost:9876/getJSON?file=" + resultFiles[i],
+                                    method: 'GET',
+                                    dataType: 'json',
+                                    success: function(data){
+                                        onDataReceived(data);
+                                        $("#flag").append("Loaded " + data.label + ".");
+                                        $("#flag").append("<br />");
+                                    }
+                                });
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            alert('error ' + textStatus + " " + errorThrown);
+                        }
+                    });
+                }
+                
+                $("p").click(function(){
+                    $.ajax({
+                        url: 'http://localhost:9876/query',
+                        dataType: "jsonp",
+                        jsonpCallback: "_callback",
+                        cache: false,
+                        timeout: 5000,
+                        success: function(data){
+                            //$("#flag").append(data);
+                            //buildQueryString();
+                        },
+                        error: function(jqXHR, textStatus, errorThrown){
+                            alert('error ' + textStatus + " " + errorThrown);
+                        }
+                    });
+                });
+                
+                function clearPlot(){
+                    $("#flag").html("");
+                    $("#clickdata").html("");
+                    data = [];
+                    $.plot(placeholder, data, options);
+                }
+                
+                function onDataReceived(series){
+                    //$("#flag").html("Loaded " + series.label + ".<br />");
+                    /*if(!alreadyFetched[series.label]){
+                     alreadyFetched[series.label] = true;
+                     data.push(series);
+                     }*/
+                    data.push(series);
+                    $.plot(placeholder, data, options);
+                }
+                
+                function showTooltip(x, y, contents){
+                    $('<div id="tooltip">' + contents + '</div>').css({
+                        position: 'absolute',
+                        display: 'none',
+                        top: y + 5,
+                        left: x + 5,
+                        border: '1px solid #fdd',
+                        padding: '2px',
+                        'background-color': '#fee',
+                        opacity: 0.80
+                    }).appendTo("body").fadeIn(200);
+                }
+                
+                var previousPoint = null;
+                $("#placeholder").bind("plothover", function(event, pos, item){
+                    //$("#x").text(pos.x.toFixed(0));
+                    //$("#y").text(pos.y.toFixed(0));
+                    
+                    if (item) {
+                        if (previousPoint != item.dataIndex) {
+                            previousPoint = item.dataIndex;
+                            
+                            $("#tooltip").remove();
+                            var x = item.datapoint[0].toFixed(0), y = item.datapoint[1].toFixed(0);
+                            
+                            showTooltip(item.pageX, item.pageY, item.series.label + ": " + x + ", " + y);
+                        }
+                    }
+                    else {
+                        $("#tooltip").remove();
+                        previousPoint = null;
+                    }
+                    
+                });
+                
+                $("#placeholder").bind("plotclick", function(event, pos, item){
+                    if (item) {
+                        $("#clickdata").append("<br />");
+                        $("#clickdata").append(item.series.label + ": " + item.datapoint[0] + "," + item.datapoint[1]);
+                        //plot.highlight(item.series, item.datapoint);  //Doesn't work with zoom right now. Fix this.
+                    }
+                });
+                
+                
+                // show pan/zoom messages to illustrate events 
+                placeholder.bind('plotpan', function(event, plot){
+                    var axes = plot.getAxes();
+                    $(".message").html("Panning to x: " + axes.xaxis.min.toFixed(2) +
+                    " &ndash; " +
+                    axes.xaxis.max.toFixed(2) +
+                    " and y: " +
+                    axes.yaxis.min.toFixed(2) +
+                    " &ndash; " +
+                    axes.yaxis.max.toFixed(2));
+                });
+                
+                placeholder.bind('plotzoom', function(event, plot){
+                    var axes = plot.getAxes();
+                    $(".message").html("Zooming to x: " + axes.xaxis.min.toFixed(2) +
+                    " &ndash; " +
+                    axes.xaxis.max.toFixed(2) +
+                    " and y: " +
+                    axes.yaxis.min.toFixed(2) +
+                    " &ndash; " +
+                    axes.yaxis.max.toFixed(2));
+                });
+                
+                
+                // and add panning buttons
+                
+                // little helper for taking the repetitive work out of placing
+                // panning arrows
+                function addArrow(dir, right, top, offset){
+                    $('<img class="button" src="http://localhost:9876/getImg?include=arrow-' + dir + '.gif" style="right:' + right + 'px;top:' + top + 'px">').appendTo(placeholder).click(function(e){
+                        e.preventDefault();
+                        plot.pan(offset);
+                    });
+                }
+                /*     
+                 addArrow('left', 44, 231, {
+                 left: -100
+                 });
+                 addArrow('right', 16, 231, {
+                 left: 100
+                 });
+                 addArrow('up', 30, 215, {
+                 top: -100
+                 });
+                 addArrow('down', 30, 245, {
+                 top: 100
+                 });
+                 */
+            });
+        </script>
+    </body>
+</html>
