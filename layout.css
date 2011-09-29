@@ -1,0 +1,307 @@
+body {
+    font-family: sans-serif;
+    font-size: 16px;
+    color: #425955;
+    margin: 50px;
+    max-width: 800px;
+    background-color: #BFBD9F;
+}
+
+p {
+    background-color: #F1F2D8;
+}
+
+.a9multiselect {
+    width: 9.9em;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    height: 22px;
+    padding: 0;
+    margin: -.05em 0 1em 0;
+    border: 0;
+}
+
+.a9multiselect .expcol-click, .a9multiselect .expcol-click-open {
+    background-color: #fff;
+    border: 1px solid #999;
+    padding: 0;
+    margin: 0;
+    cursor: default;
+    min-width: 9.8em;
+}
+
+.a9multiselect div.expcol-click {
+    position: absolute;
+    z-index: 104;
+    height: 20px;
+}
+
+.a9multiselect div.expcol-click-open {
+    border-bottom: 1px solid #fff;
+}
+
+.a9multiselect .title {
+    font-size: .8em;
+    height: 1.3em;
+    line-height: 1.2em;
+    overflow: hidden;
+    padding: .3em 1.1em .1em .5em;
+    background: white url("http://localhost:9876/getImg?include=multiselect.gif") no-repeat top right;
+}
+
+.a9multiselect .title:hover {
+    background: white url("http://localhost:9876/getImg?include=multiselect-hover.gif") no-repeat top right;
+}
+
+.expcol-body {
+    position: absolute;
+    z-index: 106;
+    min-height: 1em;
+    background: #e9f3f8;
+    padding: .1em;
+    display: block;
+    font-size: 75%;
+    display: none;
+    margin-top: -1px;
+    border: 1px solid #999;
+}
+
+.expcol-body ul {
+    overflow: auto;
+    min-height: 1em;
+    min-width: 20em;
+    margin: 0;
+    padding: 0;
+}
+
+.expcol-body li {
+    margin: 0 0 .2em 0;
+    list-style: none;
+}
+
+.expcol-body li:hover {
+    background: #ddd;
+}
+
+.arc90_multiselect {
+    width: 12.5em;
+    height: 1.35em;
+    visibility: hidden;
+}
+
+.a9selectall {
+    border-bottom: 1px solid #ccc;
+}
+
+.borderedText {
+    border: 3px ridge #425955;
+    background-color: #F1F2D8;
+    padding: 5px;
+    width: 985px;
+}
+
+#placeholder .button {
+    position: absolute;
+    cursor: pointer;
+}
+
+#placeholder div.button {
+    font-size: smaller;
+    color: #999;
+    background-color: #eee;
+    padding: 2px;
+}
+
+.reference_select {
+    position: absolute;
+    right: 45%;
+    top: 21%;
+}
+
+.query_select {
+    position: absolute;
+    right: 45%;
+    top: 50%;
+}
+
+.message {
+    padding-left: 50px;
+    font-size: smaller;
+}
+
+.megaselectlistcolumn {
+    width: 31%;
+    margin: 0 1%;
+    float: left;
+}
+
+.megaselectlist .currentitem {
+    padding: 0;
+    border: 0.1em dotted Green;
+    color: Black;
+}
+
+/* Optional styles */
+.megaselectlist {
+    background-color: #F5F5F5;
+    border: 1px solid Silver;
+}
+
+.megaselectlistcolumn > h2 {
+    font-size: 1em;
+    background-color: #ECECEC;
+    text-align: center;
+    padding: 2px 0;
+    margin: 0;
+}
+
+.megaselectlist > p {
+    margin: 0.2em;
+}
+
+.megaselectlistcolumn > ul {
+    padding-left: 1em;
+    margin: 0;
+    color: Gray;
+}
+
+.megaselectlistcolumn > ul > li {
+    cursor: pointer;
+    padding: 0.1em;
+    font-size: small;
+}
+
+.megaselectlistcolumn > ul > li:hover {
+    background-color: #ECECEC;
+    color: Black;
+}
+
+/************* CUSTOM TAG FOR SELECT *************************/
+.setScroll {
+    overflow-y: scroll;
+}
+
+.hideitem, .elmValue {
+    display: none;
+}
+
+.selectbox {
+    background: url("http://localhost:9876/getImg?include=dropdown.png") no-repeat 0 0;
+    padding: 0px 0px 0px 35px;
+    float: left;
+    margin: 0 0 5px 0;
+}
+
+.selectbox ul {
+    background: url("http://localhost:9876/getImg?include=dropdown.png") no-repeat top right;
+    padding: 8px 22px 6px 0px;
+    margin: 0;
+    vertical-align: top; /*causes ie to align text correctly*/
+    list-style: none;
+}
+
+.select_wrap {
+    clear: both;
+    margin: 0 0px 0px 0px;
+    border: 0px solid #fff;
+}
+
+.selectboxopen {
+    clear: both;
+    background: url("http://localhost:9876/getImg?include=dropdownopen.png") no-repeat 0 0;
+    padding: 0px 0px 0px 35px;
+    float: left;
+    margin: 0;
+}
+
+.selectboxopen ul {
+    background: url("http://localhost:9876/getImg?include=dropdownopen.png") no-repeat top right;
+    padding: 7px 22px 6px 0px;
+    height: 19px;
+    margin: 0;
+    vertical-align: top; /*causes ie to align text correctly*/
+    list-style: none;
+}
+
+.selectbox ul li, .selectboxopen ul li {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: arial, helvetica, san-serif;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.selectboxoptions_wrap {
+    display: none;
+    clear: both;
+    padding: 0;
+    margin: 0;
+}
+
+.selectboxoptions_radio, .selectboxoptions_check {
+    clear: both;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background: #e6e9ed;
+}
+
+.selectboxoptions_radio li, .selectboxoptions_check li {
+    list-style: none;
+    padding: 3px 0 2px 20px;
+    margin: 2px 0 0 2px;
+    font-family: arial, helvetica, san-serif;
+    color: #333;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.hover {
+    background-color: #e6e9ed;
+}
+
+.selectboxoptions_check li {
+    background: #e6e9ed url("http://localhost:9876/getImg?include=checkboxoff.png") no-repeat 5px 6px;
+}
+
+.selectboxoptions_radio li {
+    background: #e6e9ed url("http://localhost:9876/getImg?include=radiooff.png") no-repeat 5px 6px;
+}
+
+.selectboxoptions_radio li.selected {
+    background: #f2f2f2 url("http://localhost:9876/getImg?include=selectradio.png") no-repeat 5px 6px;
+    display: block !important;
+}
+
+.selectboxoptions_radio li.selected_disable {
+    background: #f2f2f2 url("http://localhost:9876/getImg?include=selectradio_disable.png") no-repeat 5px 6px;
+    display: block !important;
+}
+
+.selectboxoptions_check li.selected {
+    background: #f2f2f2 url("http://localhost:9876/getImg?include=selectcheck.png") no-repeat 5px 6px;
+    display: block !important;
+}
+
+.selectboxoptions_check li.selected_disable {
+    background: #f2f2f2 url("http://localhost:9876/getImg?include=selectcheck_disable.png") no-repeat 5px 6px;
+    display: block !important;
+}
+
+.selectboxoptions_radio li.hover, .selectboxoptions_check li.hover {
+    background-color: #f2f2f2;
+}
+
+.selectboxfoot {
+    background: url("http://localhost:9876/getImg?include=selectfoot.png") no-repeat 0 0;
+    padding: 0px 0px 0px 35px;
+    float: left;
+}
+
+.selectboxfoot div {
+    background: url("http://localhost:9876/getImg?include=selectfoot.png") no-repeat top right;
+    padding: 7px 22px 10px 0px;
+    margin: 0;
+}

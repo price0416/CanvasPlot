@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>jQuery - Sexy Select </title>
+    <!-- Requirements -->
+    <script src="js/jquery-1.4.2.min.js" type="text/javascript"></script>
+    <script src="js/jquery-ui-1.8.6.custom.min.js" type="text/javascript"></script>
+    <link href="css/ui-lightness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css" />
+    <script src="js/ui.sexyselect.min.0.6.js" type="text/javascript"></script>
+    <link href="css/ui.sexyselect.0.55.css" rel="stylesheet" type="text/css" />
+    
+    <!-- Sample None of the below is required-->
+    <script src="js/sample.js" type="text/javascript"></script>
+    <script src="js/shCore.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="css/layout.css" />
+    <link href="css/shCore.css" rel="stylesheet" type="text/css" />
+    <link href="css/shThemeDefault.css" rel="stylesheet" type="text/css" />
+    <script src="js/shBrushJScript.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('#pretty_select').sexyselect();
+            $('#pretty_select2').sexyselect({ title: 'Custom Title', autoSort: true, allowInput: true });
+            $('#pretty_select3').sexyselect({ title: 'Advanced Title', onItemSelected: function (element, options) {
+                alert('Element Selected : ' + element.val() + ' is Checked?' + element.attr('checked'));
+            }, autoSort: false, allowInput: true, allowDebug: true, allowCollapse: false, selectionMode: 'multiple', connectedList: { connection: 'pretty_select4', twoWay: true }
+            });
+
+            $('#pretty_select4').sexyselect({ title: 'Added Stykes', autoSort: false, allowInput: true, allowDebug: true, allowCollapse: false, selectionMode: 'single', confirmDelete: { modal: true, confirm: true, text: 'Sample delete' }, styleize: true, triStateRadio: true, allowFilter: true });
+
+        });
+    </script>
+    <style type="text/css">
+        .style1
+        {
+            font-size: small;
+        }
+        .style2
+        {
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <h3>jQuery SexySelect v. 0.6</h3>
+        <strong>Author : </strong>Nico VanHaaster<br />
+        <strong>Updated: 06/05/2011</strong>
+        <br />
+        <p>
+            The jQuery SexySelect is a simple plugin written for educational purposes to allow for easier (and frankly prettier) manipulation of Single or Multiple select boxes (drop down lists). <br /><br />
+            This plugin will only work with select boxes and no other element types.<br /><br />
+            <strong>Turn this</strong><br />
+            <select size="4" id="uglyselect">
+                <option value="Value 1">Value 1</option>
+                <option value="Value 2">Value 2</option>
+                <option value="Value 3">Value 3</option>
+                <option value="Value 4">Value 4</option>
+                <option value="Value 5">Value 5</option>
+            </select>
+            <br />
+            <strong>Into</strong><br />
+            <select size="4" id="pretty_select">
+                <option value="Value 1">Value 1</option>
+                <option value="Value 2">Value 2</option>
+                <option value="Value 3">Value 3</option>
+                <option value="Value 4">Value 4</option>
+                <option value="Value 5">Value 5</option>
+            </select>
+            <br />
+            <a class="sample" href="javascript:;" onclick="toggleSample($('#first_sample'),$(this));">show sample</a>
+            <pre id="first_sample" xt="sample">
+                <script type="syntaxhighlighter" class="brush: js"><![CDATA[
+                  $('#pretty_select').sexyselect();
+                ]]></script>
+            </pre>
+        </p>
+        <h4>Features</h4>
+        <ul>
+            <li>
+                Skinned using jQuery UI themes 1.8.6+
+            </li>
+            <li>
+                Collapsable select region
+            </li>
+            <li>
+                Allow user to add & remove options
+            </li>
+            <li>
+                Single, Multiple & No Selection modes
+            </li>
+            <li>
+                Auto Sorting
+            </li>
+            <li>
+                Drag & Drop Sorting (with Auto Sorting disabled)
+            </li>
+            <li>
+                Events On Item Creation & Items Syncronization
+            </li>
+            <li>
+                Custom Header Text
+            </li>
+            <li>
+                Simple item count & validation methods
+            </li>
+            <li>
+                Watermark Entry Text
+            </li>
+            <li>
+                Custom CSS Styles such as height, width, and background display.
+            </li>
+        </ul>
+        <h4 id="s1">Sample 1: Allow User Entry with Auto Sort (no drag drop) and custom title</h4>
+            <p>
+                In the below sample you will notice that Auto Sort is on which has now sorted the items alphabetically and also disabled the Drag & Drop sorting features. Additionally the User input bar to allow
+                the user to add a new option appears and a custom title is displayed.
+            </p>
+            <select size="4" id="pretty_select2">
+                <option value="Value 1">Value 1</option>
+                <option value="Value 2">Value 2</option>
+                <option value="Value 3">Value 3</option>
+                <option value="Value 4">Value 4</option>
+                <option value="Value 5">Value 5</option>
+            </select>
+            <br />
+            <a class="sample" href="javascript:;" onclick="toggleSample($('#second_sample'),$(this));">show sample</a>
+            <pre id="second_sample" xt="sample">
+                <script type="syntaxhighlighter" class="brush: js"><![CDATA[
+                  $('#pretty_select2').sexyselect({ title: 'Custom Title', autoSort: true, allowInput: true });
+                ]]></script>
+            </pre>
+        <h4 id="s2">Sample 2: (DEBUG) Multiple Selection Mode (no collapse, with autosort off, 
+            alert on item selected)</h4>
+        <p>
+            The sample below has Multiple selection turned on and also has the ability to collapse the element and the autosort off. This will allow users to select multiple options and allow for drag and drop sorting. For added benifit I have enabled debug mode to show
+            the original item. 
+        </p>
+        <select size="4" id="pretty_select3">
+            <option value="Value 1">Value 1</option>
+            <option value="Value 2">Value 2</option>
+            <option value="Value 3">Value 3</option>
+            <option value="Value 4">Value 4</option>
+            <option value="Value 5">Value 5</option>
+        </select>
+        <a href="javascript:;" onclick="selectValue();">Select value 3 via Javascript version 0.4+</a><br />
+        <a href="javascript:;" onclick="selectValue3();">Toggle Value 3 selection via Javascript version 0.4+</a><br />
+        <a href="javascript:;" onclick="selectValue2();">Select value 2 via Javascript version 0.3</a><br />
+        <a class="sample" href="javascript:;" onclick="toggleSample($('#third_sample'),$(this));">show sample</a>
+        <pre id="third_sample" xt="sample">
+            <script type="syntaxhighlighter" class="brush: js"><![CDATA[
+                $('#pretty_select3').sexyselect({ title: 'Advanced Title', autoSort: false, 
+                                                allowInput: true,onItemSelected: function(element,options) { alert(element.val());}, allowDebug:true,allowCollapse:false,selectionMode:'multiple' });
+            ]]>
+            </script>
+        </pre>
+        <br /><br />
+        <select size="4" id="pretty_select4">
+            <option value="Value 1">Value 1</option>
+            <option value="Value 2">Value 2</option>
+            <option value="Value 3">Value 3</option>
+            <option value="Value 4">Value 4</option>
+            <option value="Value 5">Value 5</option>
+        </select>
+        
+        <h4 id="r4">Change Log</h4>
+        <strong>Changes in v0.6</strong>
+        <ul>
+            <li>Fixed Bug: Empty connected lists cannot recieve values</li>
+            <li>Fixed Auto Sort Bug: Showing numbers not the text when auto sort = true</li>
+            <li>Fixed Auto Sort Bug: Selected items were not being persisted</li>
+            <li>Fixed ID Naming Bug: ensured no spaces in the full id string</li>
+            <li>Fixed IE bug for extra comma</li>
+            <li>Added Event : OnItemDeleted, calls this event after an item is deleted</li>
+        </ul>
+        <strong>Changes in v0.55</strong>
+        <ul>
+            <li>Reworked many of the .get() selectors to work with IE</li>
+            <li>Fixed bug: Revert on select lists were throwing an error in IE. In IE revert is set to false when sorting a list (manual)</li>
+            <li>Fixed reordering bug</li>
+            <li>Fixed connected lists bug</li>
+            <li>Minified SexySelect to 57% original size</li>
+            <li>Reworked autosort methods</li>
+            <li>Fixed "item already exists" warning for connected lists</li>
+            <li>Fixed items (randomly) disappearing</li>
+            <li>Added callback events to items when using Styleize</li>
+        </ul>
+        <strong>Changes in v0.5</strong>
+        <ul>
+            <li>Reworked Selectors for optimal performance</li>
+            <li>Added Filtering the items</li>
+            <li>Added drag and drop across lists with one or two way binding</li>
+            <li>Added class tags to all elements for simpler skinning</li>
+            <li>Removed code duplications and added new binding methods</li>
+            <li>Created a drag handler to mimimize the element while inflight. </li>
+            <li>Included 3 new plugins. (see plugins : requires v0.5 & stylize pack)
+                <ul>
+                    <li>Checkbox: Restyled Checkbox, replaces the default look</li>
+                    <li>Radio Box: creates a radio button (list) with a Checkbox look and Tri State radio buttons</li>
+                    <li>.disableTextSelect - Disable Text Select Plugin : Copyright (c) 2007 James Dempster (letssurf@gmail.com, <a href="http://www.jdempster.com/category/jquery/disabletextselect/">http://www.jdempster.com/category/jquery/disabletextselect/</a> </li>
+                </ul>
+            </li>
+            <li>Added Options: (see options for more details)
+                <ul>
+                    <li>styleize : allow for style the radio & checkboxes</li>
+                    <li>confirmDelete: creates a dialog to confirm removal with custom text, option jQuery dialog and callBack handler </li>
+                    <li>connectList : connect your list with another for cross list drag and drop with optional two-way binding</li>
+                    <li>filterKeyUpTimeout : timeout for filtering (searching)</li>
+                    <li>triStateRadio : create tristate radio buttons</li>
+                    <li>allowFilter : allowFiltering</li>
+                </ul>
+            </li>
+            <li>
+                Created Methods : (see methods for more details)
+                <ul>
+                    <li>Filter : filter the results against filtered text, optional programically supply the filter text</li>
+                    <li>addItem : Add a new item to the original list</li>
+                    <li>syncAux : Auxiliary call to sync the items </li>
+                    <li>connectWith : Allow connections to be made programically</li>
+                    <li>totalVisibleItems : Returns a count of all the items visible (not hidden by the filter)</li>
+                    <li>removeItem : Removes a specific item by value</li>
+                </ul>
+            </li>
+        </ul>
+        <strong>Changes in v0.4</strong>
+        <ul>
+            <li>Added method : <i>elements</i>. This returns all the <u>option</u> elements that are currently added to the select list
+            </li>
+            <li>
+                Added method : <i>selectOption</i>. This method accepts two values, the element to be modified and the selected state. (true/false)
+            </li>
+        </ul>
+        <strong>Changes in v0.3</strong>
+        <ul>
+            <li>
+                Renamed option : <i>_debugShowOriginal</i> to <u>allowDebug</u>. This option also will show alert messages on errors through custom events.
+            </li>
+            <li>
+                Added option : <u>nooptionstext</u> which allows for you to change the text when no options are added to the list, default is 'no options added'
+            </li>
+            <li>
+                Added event : <u>onItemSelect</u> : runs a custom event when an option is selected, returns the element created and a collection of all the options in the list. Runs after the click event is handled
+            </li>
+            <li>
+                Added event : <u>onitemcreating</u> : runs a custom event before the item is created. This allows for custom validation. This event passes in the input text object and also the EventArgs, this event expects the EventArgs to be passed back. See the <b>Events Tab for more info</b>
+            </li>
+            <li>
+                Added method : <u>showError</u> : Shows the error bar with custom text that you pass in. Expects the text to display and the timeout to slide up. See the methods tab
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
