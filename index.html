@@ -49,24 +49,23 @@
                 <option value='-1'>Reference Organism</option>
             </select>
         </div>
-        
         <div class="select_wrap">
-        <select name="querySelect" class="select_field" multiple="multiple" id="querySelect" style="width:1000px;">
-        <option value='-1'>Query Organisms</option>
-        </select>
+            <select name="querySelect" class="select_field" multiple="multiple" id="querySelect" style="width:1000px;">
+                <option value='-1'>Query Organisms</option>
+            </select>
         </div>
         <!--
         <form action="#" method="get" name="form" id="form">
-            <div class="examples">
-                <label class="examples">
-                    First example of MultiSelect
-                </label>
-                <select name="querySelect" multiple="multiple" id="querySelect" style="width:1000px;" class="arc90_multiselect">
-                    <option value='-1'>Query Organisms</option>
-                </select>
-            </div>
+        <div class="examples">
+        <label class="examples">
+        First example of MultiSelect
+        </label>
+        <select name="querySelect" multiple="multiple" id="querySelect" style="width:1000px;" class="arc90_multiselect">
+        <option value='-1'>Query Organisms</option>
+        </select>
+        </div>
         </form>
-		-->
+        -->
         <br clear="all" />
         <br/>
         <script type="text/javascript">
@@ -125,13 +124,13 @@
                             $("#referenceSelect").change(onReferenceChange);
                             $("#querySelect").change(onQueryChange);
                             /*
-                            a$.NO_SELECTION = 'No selection'; // TEXT for 'No selection' when nothing selected
-                            a$.SELECTED = 'Options selected'; // TEXT for 'XX Options selected' when over 1 selected
-                            a$.SELECT_ALL = 'Select All'; // TEXT for 'Select All' for checkboxes
-                            a$.SelectAllMin = 6; // minimum number of options needed to show 'Select All'
-                            a$.WhenToUse = 'class'; // class | multiple | all : for how to make selects become multiselects
-                            a$.msSeparator = '|'; // separator for values (can be multiple characters)
-                            */
+                             a$.NO_SELECTION = 'No selection'; // TEXT for 'No selection' when nothing selected
+                             a$.SELECTED = 'Options selected'; // TEXT for 'XX Options selected' when over 1 selected
+                             a$.SELECT_ALL = 'Select All'; // TEXT for 'Select All' for checkboxes
+                             a$.SelectAllMin = 6; // minimum number of options needed to show 'Select All'
+                             a$.WhenToUse = 'class'; // class | multiple | all : for how to make selects become multiselects
+                             a$.msSeparator = '|'; // separator for values (can be multiple characters)
+                             */
                         },
                         error: function(jqXHR, textStatus, errorThrown){
                             alert('error ' + textStatus + " " + errorThrown);
@@ -225,6 +224,7 @@
                                     method: 'GET',
                                     dataType: 'json',
                                     success: function(data){
+										sleep(500);
                                         onDataReceived(data);
                                         $("#flag").append("Loaded " + data.label + ".");
                                         $("#flag").append("<br />");
@@ -236,6 +236,14 @@
                             alert('error ' + textStatus + " " + errorThrown);
                         }
                     });
+                }
+               
+			  
+                function sleep(ms){
+                    var dt = new Date();
+                    dt.setTime(dt.getTime() + ms);
+                    while (new Date().getTime() < dt.getTime()) 
+                        ;
                 }
                 
                 $("p").click(function(){
